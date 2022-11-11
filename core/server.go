@@ -2,17 +2,17 @@ package core
 
 import (
 	"context"
-	"github.com/cosmos/ibc-go/v3/modules/core/02-client/types"
-	"sync"
-	"time"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	ibctransfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
+	"github.com/cosmos/ibc-go/v3/modules/core/02-client/types"
 	"github.com/scalalang2/cosmfaucet/gen/proto/faucetpb"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/peer"
 	"google.golang.org/grpc/status"
+	"sync"
+	"time"
 )
 
 type Server struct {
@@ -99,17 +99,26 @@ func (s *Server) GiveMe(ctx context.Context, request *faucetpb.GiveMeRequest) (*
 		zap.String("to", client.MustEncodeAccAddr(acc)),
 		zap.String("coin", coin.String()))
 
-	msg := &ibctransfertypes.MsgTransfer{
-		SourceChannel: chainConfig.ChannelId,
-		SourcePort:    chainConfig.PortId,
-		Token:         coin,
-		Sender:        client.MustEncodeAccAddr(from),
-		Receiver:      request.Address,
-		TimeoutHeight: types.Height{
-			RevisionHeight: 0,
-			RevisionNumber: 0,
-		},
-		TimeoutTimestamp: uint64(time.Now().UnixNano() + 10*time.Minute.Nanoseconds()),
+	var msg sdk.Msg
+	if chainConfig.ChainId == "nova" {
+		msg = &banktypes.MsgSend{
+			FromAddress: client.MustEncodeAccAddr(from),
+			ToAddress:   client.MustEncodeAccAddr(acc),
+			Amount:      []sdk.Coin{coin},
+		}
+	} else {
+		msg = &ibctransfertypes.MsgTransfer{
+			SourceChannel: chainConfig.ChannelId,
+			SourcePort:    chainConfig.PortId,
+			Token:         coin,
+			Sender:        client.MustEncodeAccAddr(from),
+			Receiver:      request.Address,
+			TimeoutHeight: types.Height{
+				RevisionHeight: 0,
+				RevisionNumber: 0,
+			},
+			TimeoutTimestamp: uint64(time.Now().UnixNano() + 10*time.Minute.Nanoseconds()),
+		}
 	}
 
 	txResponse, err := client.SendMsg(ctx, msg)
