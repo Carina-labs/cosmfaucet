@@ -12,7 +12,7 @@ function App() {
     const [selected, setSelected] = useState(null);
 
     const loadChains = async () => {
-        return fetch("/api/v1/faucet/chains")
+        return fetch("http://0.0.0.0:8081/api/v1/faucet/chains")
             .then(response => response.json())
     }
 

@@ -37,6 +37,8 @@ type ChainConfig struct {
 	KeyName       string  `yaml:"key_name"`
 	Key           string  `yaml:"key"`
 	DropCoin      string  `yaml:"drop_coin"`
+	ChannelId     string  `yaml:"channel_id"`
+	PortId        string  `yaml:"port_id"`
 }
 
 // LoadConfig loads config from file

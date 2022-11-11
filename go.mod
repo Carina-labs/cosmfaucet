@@ -3,7 +3,7 @@ go 1.18
 module github.com/scalalang2/cosmfaucet
 
 require (
-	github.com/cosmos/cosmos-sdk v0.45.5-0.20220523154235-2921a1c3c918
+	github.com/cosmos/cosmos-sdk v0.45.8
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.11.3
 	github.com/rs/cors v1.8.2
 	github.com/strangelove-ventures/lens v0.5.1
@@ -34,8 +34,8 @@ require (
 	github.com/cosmos/btcutil v1.0.4 // indirect
 	github.com/cosmos/go-bip39 v1.0.0 // indirect
 	github.com/cosmos/gorocksdb v1.2.0 // indirect
-	github.com/cosmos/iavl v0.17.3 // indirect
-	github.com/cosmos/ibc-go/v3 v3.0.0 // indirect
+	github.com/cosmos/iavl v0.19.1 // indirect
+	github.com/cosmos/ibc-go/v3 v3.3.0 // indirect
 	github.com/cosmos/ledger-cosmos-go v0.11.1 // indirect
 	github.com/cosmos/ledger-go v0.9.2 // indirect
 	github.com/danieljoos/wincred v1.1.2 // indirect
@@ -111,6 +111,7 @@ require (
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
 	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e // indirect
+	golang.org/x/exp v0.0.0-20220722155223-a9213eeb770e // indirect
 	golang.org/x/net v0.0.0-20220726230323-06994584191e // indirect
 	golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab // indirect
 	golang.org/x/term v0.0.0-20220722155259-a9ba230a4035 // indirect

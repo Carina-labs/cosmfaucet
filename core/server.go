@@ -2,10 +2,12 @@ package core
 
 import (
 	"context"
+	"github.com/cosmos/ibc-go/v3/modules/core/02-client/types"
 	"sync"
+	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	ibctransfertypes "github.com/cosmos/ibc-go/v3/modules/apps/transfer/types"
 	"github.com/scalalang2/cosmfaucet/gen/proto/faucetpb"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
@@ -65,7 +67,7 @@ func (s *Server) GiveMe(ctx context.Context, request *faucetpb.GiveMeRequest) (*
 	}
 
 	// validate address format
-	acc, err := sdk.GetFromBech32(request.Address, chainConfig.AccountPrefix)
+	acc, err := sdk.GetFromBech32(request.Address, "nova")
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid address")
 	}
@@ -97,10 +99,17 @@ func (s *Server) GiveMe(ctx context.Context, request *faucetpb.GiveMeRequest) (*
 		zap.String("to", client.MustEncodeAccAddr(acc)),
 		zap.String("coin", coin.String()))
 
-	msg := &banktypes.MsgSend{
-		FromAddress: client.MustEncodeAccAddr(from),
-		ToAddress:   client.MustEncodeAccAddr(acc),
-		Amount:      []sdk.Coin{coin},
+	msg := &ibctransfertypes.MsgTransfer{
+		SourceChannel: chainConfig.ChannelId,
+		SourcePort:    chainConfig.PortId,
+		Token:         coin,
+		Sender:        client.MustEncodeAccAddr(from),
+		Receiver:      request.Address,
+		TimeoutHeight: types.Height{
+			RevisionHeight: 0,
+			RevisionNumber: 0,
+		},
+		TimeoutTimestamp: uint64(time.Now().UnixNano() + 10*time.Minute.Nanoseconds()),
 	}
 
 	txResponse, err := client.SendMsg(ctx, msg)
