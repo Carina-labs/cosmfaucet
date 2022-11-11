@@ -39,7 +39,7 @@ chains:
     account_prefix: "juno"
     sender: "juno1u9vn33qs6jdr3wwq4u2l9p349n9c95ux5cuzfn"
     key: "reopen throw concert garment wash slab jump company habit father below stage float attitude achieve net charge bulb mouse mind fat net hello vague"
-    gas_adjustment: 1.2
+    gas_adjustment: 2.0
     gas_price: "0.01ujuno"
     drop_coin: "10000000ujuno"
     channel_id: "channel-0"
